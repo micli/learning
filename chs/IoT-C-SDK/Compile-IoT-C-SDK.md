@@ -166,6 +166,6 @@ sudo apt-get update
 在使用这些样例代码时，需要预先设置IoT Hub 设备连接串。以serializer 文件夹下的samples/simplesample_amqp 样例为例。
 源代码内并没有设置有效的IoT Hub 设备连接串，需要手工修改有效连接串后再进行构建和测试运行。一般来说IoT Hub 设备连接串的声明位于
 源代码文件.c 文件中，如下图所示：
-！[样例代码中的IoT Hub 设备连接串声明](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/device-connstr.png)
+![样例代码中的IoT Hub 设备连接串声明](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/device-connstr.png)
 
 在运行程序之前，必须要对connectionString 进行有效地赋值。
