@@ -30,7 +30,7 @@ IoT Client C SDK 的获取目前有两种途径，一种是通过添加信任的
 
 如图所示：
 
-![参考图片](https://github.com/micli/learning/images/IoT-C-SDK/apt-get-ppa.png, '为apt-get 添加PPA 源')
+![参考图片](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/apt-get-ppa.png '为apt-get 添加PPA 源')
 
 然后更新apt-get
 > sudo apt-get update
@@ -40,11 +40,11 @@ IoT Client C SDK 的获取目前有两种途径，一种是通过添加信任的
 
 如图所示:
 
-![参考图片](https://github.com/micli/learning/images/IoT-C-SDK/apt-get-install.png, '安装IoT C SDK')
+![参考图片](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/apt-get-install.png '安装IoT C SDK')
 
 安装成功后，IoT C SDK 的相关头文件被放置在/usr/include/azureiot/ 目录下，如图所示：
 
-![参考图片](https://github.com/micli/learning/images/IoT-C-SDK/sdk-include.png, '安装IoT C SDK')
+![参考图片](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/sdk-include.png '安装IoT C SDK')
 
 其中在/usr/include/azureiot/inc/ 子目录下含有一个azure_c_shared_utility 目录，这个目录中含有一个C 运行时的最小集。
 用来支持Azure 相关的C 语言代码的运行。包括一些通用的宏定义，字符串的实现等等。目的是为C SDK 提供最大的可移植性。IoT C SDK
