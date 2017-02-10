@@ -168,4 +168,22 @@ sudo apt-get update
 源代码文件.c 文件中，如下图所示：
 ![样例代码中的IoT Hub 设备连接串声明](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/device-connstr.png)
 
-在运行程序之前，必须要对connectionString 进行有效地赋值。
+在运行程序之前，必须要对connectionString 进行有效地赋值。创建设备链接字符串的方法请参考下面一节内容。
+
+### 获取IoT Hub 设备联接串
+
+IoT SDK 内含一个用Node.js 开发的命令行工具来帮助开发人员在命令行下管理Azure IoT Hub 服务。
+这个命令行工具名为iothub-explorer，安装方法如下：
+> sudo npm install -g iothub-explorer
+
+如果在安装后遇到"/usr/bin/env: node: No such file or directory" 错误，请运行下面的命令：
+> sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+这是由于Node.js 在后期版本中修改了文件夹名称导致的。
+
+在一切就绪后，可以通过下面的命令创建IoT Hub 设备联接字符串：
+> iothub-explorer login "<IoT Hub 服务链接字符串>"  
+iothub-explorer create <设备ID> --connection-string
+
+如下图所示:
+![参考图片](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/iothub-explorer-create.png '创建设备ID')
