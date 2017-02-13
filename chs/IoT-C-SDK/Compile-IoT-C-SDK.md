@@ -15,8 +15,7 @@
 + IoT C SDK 的获取
 + IoT C SDK 概览
 + IoT C SDK 的编译和测试
-+ IoT C SDK 的交叉编译
-+ 使用IoT C SDK 创建自己的设备应用
++ [使用IoT C SDK 创建自己的设备应用](https://github.com/micli/learning/blob/master/chs/IoT-C-SDK/Create-IoT-Device-App.md)
 + 参考链接
 
 ## 什么样的设备支持接入Azure IoT Hub？
