@@ -16,7 +16,7 @@
 + 通过数据连接串创建iothubClient
 + 发送数据到IoT Hub
 + 监控数据接收
-+ 让设备从IoT Hub 接收数据
++ 如何快速开始？
 
 ## 设备发送数据到IoT Hub 的操作流程
 
@@ -30,3 +30,156 @@
 5. 消息发送到Azure IoT Hub 之后，IoT SDK 会通过回调函数通知发送程序，此时应进行后处理；
 6. 步骤3-步骤5将周期性地往复执行；
 7. 程序退出之前对占用资源进行释放；
+
+## 声明消息结构体
+
+IoT C SDK 中预定义了一组宏用来帮助开发人员声明要传输的消息。
+
+```c
+BEGIN_NAMESPACE(WeatherStation);
+DECLARE_MODEL(ContosoAnemometer,
+WITH_DATA(ascii_char_ptr, DeviceId),
+WITH_DATA(int, WindSpeed),
+WITH_ACTION(TurnFanOn),
+WITH_ACTION(TurnFanOff),
+WITH_ACTION(SetAirResistance, int, Position)
+);
+END_NAMESPACE(WeatherStation);
+```
+
+消息的声明必须要使用BEGIN\_NAMESPACE 和END\_NAMESPACE 宏包裹起来，并且需要在这对宏中声明命名空间的名称。
+DECLARE_MODEL 宏用来声明要发送的消息结构。第一个参数是消息对象的名称，此后都是消息体的成员声明。
+WITH\_DATA 宏用来声明单项消息体的成员，其中第一个参数是消息体成员的数据类型，第二个参数是消息体成员的名字。
+IoT C SDK 内建支持的序列化数据类型请参考下表：
+
+
+数据类型 | 描述
+---------|----------
+double | 双精度浮点
+int | 32位整型
+float | 单精度浮点
+long | 长整型
+int8_t | 8位整型
+int16_t | 16位整型
+int32_t | 32位整型
+int64_t | 64位整型
+bool | 布尔型
+ascii_char_ptr | ASCII码字符串
+EDM_DATE_TIME_OFFSET | 日期时间偏移量
+EDM_GUID | GUID
+EDM_BINARY | 二进制
+DECLARE_STRUCT | 复杂类型
+
+对于Azure IoT Hub 服务下发的消息，在IoT 设备端需要有对应的函数来处理。下发消息的处理函数的映射关系是通过WITH_ACTION 宏来声明的。
+开发人员需要通过定义这些声明来实现IoT 设备与IoT Hub 之间的数据交互。在消息传递过程中，IoT C SDK 会将消息结构序列化为JSON 格式的文本，
+在设备和IoT Hub 之间进行传递。对于二进制内容，IoT C SDK 会将数据线转换为Base64 编码，以确保数据变成可打印字符再进行传递。
+
+## 通过数据连接串创建iothubClient
+
+IoT C SDK 提供了名为IoTHubClient_CreateFromConnectionString 的API函数，该函数通过传入的设备连接串可以生成一个
+IOTHUB\_CLIENT\_HANDLE 类型的句柄对象。这个对象代表了客户端设备与服务端Azure IoT Hub 的链接。在为该函数传入设备连接串
+的同时，还需要传入协议提供者的指针，用来指名用什么连接协议与Azure IoT Hub 进行通信。通常协议的提供者指针为：
+AMQP\_Protocol，MQTT\_Protocol，HTTP\_Protocol 三种选择。
+设备的注册和连接串的创建，请参考
+[在Linux 操作系统的设备上使用Azure IoT C SDK](https://github.com/micli/learning/blob/master/chs/IoT-C-SDK/Compile-IoT-C-SDK.md)
+ 一文中获取IoT Hub 设备联接串一节的内容。
+
+在正式调用IoTHubClient_CreateFromConnectionString 之前，需要调用platform\_init()来要求IoT C SDK 进行初始化。
+代码如下：
+
+```c
+// 初始化IoT Hub Client
+IOTHUB_CLIENT_HANDLE InitIoTHubClient(const char* connectionString)
+{
+    printf("Starting the IoTHub client simple sample...\r\n");
+    if(NULL == connectionString)
+    {
+        printf("Invalid connection string...\r\n");
+        return NULL;
+    }
+    IOTHUB_CLIENT_HANDLE iotHub = NULL;
+    if (0 != platform_init())
+    {
+        printf("Failed to initialize the platform.\r\n");
+    }
+    else if(NULL == (iotHub = IoTHubClient_CreateFromConnectionString(
+        connectionString, AMQP_Protocol)))
+    {
+        printf("Failed to creating the IoT Hub on Azure, please check connection string.\r\n");
+    }
+    serializer_init(NULL);
+    return iotHub;
+}
+```
+
+## 发送数据到IoT Hub
+
+IoT 设备的一个最主要的功能就是用来完成把数据从传感器提取，再发往Azure IoT Hub 服务的过程。当数据从传感器中提取出来后，
+就需要调用IoT C SDK的API 把数据上送到Azure IoT Hub。IoT C SDK 提供了IoTHubClient\_SendEventAsync() 函数来实现
+异步地发送消息功能。IoTHubClient\_SendEventAsync() 函数要求传入IOTHUB\_CLIENT\_HANDLE 对象来表用数据要发送到哪一个
+已经联接的Azure IoT Hub 服务。第二个参数要求传入消息句柄对象，表明要发送的消息是哪个一。第三个参数是回调函数指针，由于是
+异步发送，IoTHubClient\_SendEventAsync()函数是立即返回的，此时该函数会在后台线程中完成消息的发送。当消息发送结束，
+会调用开发人员指定的回调函数，以便开发人员进行消息发送后的后续的处理。第四个参数是一个上下文对象指针。对象的类型可由
+开发人员自定义，这个对象主要用来记录发送消息的状态信息。当回调函数被触发的时候，该对象将作为参数传入回调函数，
+帮助开发人员恢复状态。
+
+在消息发送之前，需要对消息进行序列化操作。IoT C SDK 的SERIALIZE 宏可以帮助开发人员把内存中的数据和对象转换成JSON字节流。
+这一过程我们称之为序列化。SERIALIZE 宏要求开发人员传入一个指向字符串的指针和一个指向size_t 类型的指针。这个宏会自动地
+为序列化字节流动态分配内存，并将内存首地址保存在传入宏的指向字符串的指针中。因此开发人员在使用结束后，需要自行释放缓冲区，
+避免内存泄露。 序列化消息和发送消息的代码如下：
+
+```c
+// 序列化消息数据
+unsigned char* destination = NULL; // 序列化结果缓冲区指针
+size_t size; // 序列化结果的大小
+if (SERIALIZE(&destination, &size, msg->DeviceId, msg->Data) != CODEFIRST_OK)
+{
+    printf("Serialize message failed.\r\n");
+    continue;
+}
+// 发送数据到IoT Hub 服务端
+SendMessageToIoTHub(handle, destination, size);
+// 发送数据到IoT Hub
+void SendMessageToIoTHub(IOTHUB_CLIENT_HANDLE iothubClient, unsigned char* buffer, size_t size)
+{
+    if(NULL == iothubClient)
+    {
+        printf("Invalid IoT Hub handle...\r\n");
+        return ;
+    }
+    if(NULL == buffer)
+    {
+        printf("Invalid message buffer...\r\n");
+        return ;
+    }
+    IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(buffer, size);
+    if (messageHandle == NULL)
+    {
+        printf("unable to create a new IoTHubMessage\r\n");
+    }
+    // 利用SDK API 异步发送消息
+    IoTHubClient_SendEventAsync(iothubClient, messageHandle, MessageSentCompleted, messageHandle);
+    printf("The message:\r\n %s \r\n has been sent.\r\n", buffer);
+    // 释放缓冲区内存
+    free(buffer);
+    buffer = NULL;
+}
+```
+
+## 监控数据接收
+
+在代码编写完成后，需要验证数据是否已经可以正常地上传到Azure IoT Hub 中。这需要使用iothub-explorer 工具来帮助监控
+Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，并通过npm 进行安装，命令如下：
+
+> npm install -g iothub-explorer
+
+安装结束后，可以通过iothub-explorer 的monitor-events 参数来监控指定设备ID 上送的消息，命令如下：
+
+> iothub-explorer monitor-events [设备Id] --login [Azure IoT Hub 管理连接字符串]
+
+连接成功后，会在命令行中显示指定设备Id上送的消息。如下图所示：
+
+![iothub-explorer监控设备发送消息](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/iothub-explorer-monitor.png 'iothub-explorer监控设备消息')
+
+## 如何快速开始？
+
