@@ -180,7 +180,7 @@ void MessageSentCompleted(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCo
 
 在回调函数中，第一个参数代表发送的结果，可能是成功或者是失败；第二个参数是IoTHubClient_SendEventAsync传入的上下文状态对象。
 
-## 监控数据接收
+## 监控Azure IoT Hub 数据接收
 
 在代码编写完成后，需要验证数据是否已经可以正常地上传到Azure IoT Hub 中。这需要使用iothub-explorer 工具来帮助监控
 Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，并通过npm 进行安装，命令如下：
@@ -195,6 +195,7 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 
 ![iothub-explorer监控设备发送消息](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/iothub-explorer-monitor.png 'iothub-explorer监控设备消息')
 
+以上代码位于[https://github.com/micli/learning/tree/master/src/IoT-C-SDK](https://github.com/micli/learning/tree/master/src/IoT-C-SDK) 之中。
 在这一切准备好之后，就可以运行编写好的IoT 设备程序，来验证程序是否真的把消息发送到了指定的Azure IoT Hub 服务上面。
 
 ## 如何快速开始？
@@ -223,6 +224,9 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 > make
 
 通过以上五个步骤就可以快速创建出一个用于向Azure IoT Hub 服务端上传数据的简单应用程序了。
+
+程序真正部署到IoT 设备上运行时，往往需要自动启动，可考虑使用systemd 配置应用程序自动启动，Supervisor 对于IoT 设备来说
+可能显得太重了。
 
 ## 关于交叉编译
 
