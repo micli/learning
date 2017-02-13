@@ -207,7 +207,7 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 > sudo add-apt-repository ppa:aziotsdklinux/ppa-azureiot   
 > sudo apt-get install -y azure-iot-sdk-c-dev
 
-2. 在操作系统任意位置创建一个文件夹，从GitHub 上下载IoT C SDK 的快速启动代码到这个文件夹：
+2. 在操作系统任意位置创建一个文件夹，从GitHub 上下载IoT C SDK 的[快速启动代码](https://github.com/micli/learning/tree/master/src/IoT-C-SDK)到这个文件夹：
 
 ![IoT快速开始代码文件夹](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/IoT-Quick-Start-Folder.png 'IoT快速开始代码文件夹')
 
@@ -241,7 +241,7 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 
 > sudo apt-get install -y build-essential curl libcurl4-openssl-dev libssl-dev uuid-dev
 
-在变易计算机上，需要从Github上下载工具链：
+在编译计算机上，需要从Github上下载工具链：
 > cd ~  
 > mkdir RPiTools  
 > cd RPiTools  
