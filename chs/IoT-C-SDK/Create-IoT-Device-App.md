@@ -17,6 +17,7 @@
 + 发送数据到IoT Hub
 + 监控数据接收
 + 如何快速开始？
++ 关于交叉编译
 
 ## 设备发送数据到IoT Hub 的操作流程
 
@@ -166,6 +167,19 @@ void SendMessageToIoTHub(IOTHUB_CLIENT_HANDLE iothubClient, unsigned char* buffe
 }
 ```
 
+当消息传递到Azure IoT Hub 之后，IoT C SDK 会回调已经预先定义好的事后处理函数，也就是上面代码中的MessageSentCompleted，
+回调函数的声明如下:
+
+```c
+void MessageSentCompleted(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
+{
+    printf("Confirmation received for message from device with result = %s\r\n",
+    ENUM_TO_STRING(IOTHUB_CLIENT_CONFIRMATION_RESULT, result));
+}
+```
+
+在回调函数中，第一个参数代表发送的结果，可能是成功或者是失败；第二个参数是IoTHubClient_SendEventAsync传入的上下文状态对象。
+
 ## 监控数据接收
 
 在代码编写完成后，需要验证数据是否已经可以正常地上传到Azure IoT Hub 中。这需要使用iothub-explorer 工具来帮助监控
@@ -181,5 +195,95 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 
 ![iothub-explorer监控设备发送消息](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/iothub-explorer-monitor.png 'iothub-explorer监控设备消息')
 
+在这一切准备好之后，就可以运行编写好的IoT 设备程序，来验证程序是否真的把消息发送到了指定的Azure IoT Hub 服务上面。
+
 ## 如何快速开始？
+
+了解了上内容后，如何从零开始构建一个简单的IoT 设备端应用程序呢？ 您可以遵循下面的步骤：
+
+1. 利用apt-get 下载IoT C SDK，命令如下：
+
+> sudo add-apt-repository ppa:aziotsdklinux/ppa-azureiot   
+> sudo apt-get install -y azure-iot-sdk-c-dev
+
+2. 在操作系统任意位置创建一个文件夹，从GitHub 上下载IoT C SDK 的快速启动代码到这个文件夹：
+
+![IoT快速开始代码文件夹](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/IoT-Quick-Start-Folder.png 'IoT快速开始代码文件夹')
+
+3. 在IoTSimpleSample.c 文件的头部，修改消息的声明，使之适应数据上传的要求
+
+4. 创建一个Azure IoT Hub 服务，获取管理服务端的联接串
+
+5. 用iothub-explorer 向IoT Hub 服务端注册一个IoT 设备，并获取链接字符串。在IoTSimpleSample.c 文件中修改g_IoTHubConnectionString 变量的IoT Hub 连接串
+
+6. 打开代码的 IoTSimpleSample.c 文件, 在InitSensors() 函数中填入初始化设备代码，在RetrieveDataFromSensors()函数中填入从传感器提取数据并给消息对象赋值的代码
+
+7. 利用CMake 构建makefile 文件，再利用makefile 构建应用程序
+> cmake ./  
+> make
+
+通过以上五个步骤就可以快速创建出一个用于向Azure IoT Hub 服务端上传数据的简单应用程序了。
+
+## 关于交叉编译
+
+交叉编译的前提主要有四个步骤：
+
+1. 在开发板操作系统上安装IoT C SDK 的依赖库
+2. 把目标操作系统的工具链部署到编译计算机上
+3. 目标操作系统的头文件和库文件同步到编译计算机上
+4. 从Github 上获取IoT C SDK
+
+在准备好以上步骤以后就可以开始交叉编译了。以树莓派使用的操作系统Raspbian(Debian的变种)为例，安装依赖库
+
+> sudo apt-get install -y build-essential curl libcurl4-openssl-dev libssl-dev uuid-dev
+
+需要从Github上下载工具链：
+> cd ~  
+> mkdir RPiTools  
+> cd RPiTools  
+> git clone https://github.com/raspberrypi/tools.git
+
+下载完成后，需要把Raspbian 上的头文件和库同步到编译计算机上。这需要开发人员首先要有一个可以正常使用的开发板，
+然后让开发板通过网络与编译计算机相连。连接成功后，在开发板上打开远程访问功能，最后执行下面的命令：
+
+> cd ~/RPiTools/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf   
+> rsync -rl --safe-links pi@<树莓派设备名称或者IP地址>:/{lib,usr} .
+
+rsync 命令会递归地把开发板上的/lib 和/usr 的内容复制到编译计算机的树莓派编译器工具链目录下。 这个复制的过程会比较漫长，
+通常在网络较好的情况下也要持续40分钟以上。需要耐心等待。
+
+在以上动作完成之后，需要把Raspbian 工具链编译器所在文件夹路径设置到环境变量RPI_ROOT 中
+> cd ~/RPiTools/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf  
+> export RPI_ROOT=$(pwd)
+
+从Github上获取IoT C SDK 命令如下:
+> git clone --recursive https://github.com/Azure/azure-iot-sdks.git
+
+并修改位于IoT C SDK 文件夹所在目录/c/build_all/linux 中创建一个名为toolchain-rpi.cmake 的文件，并加入下面的内容：
+
+```cmake
+INCLUDE(CMakeForceCompiler)
+
+SET(CMAKE_SYSTEM_NAME Linux)     # this one is important
+SET(CMAKE_SYSTEM_VERSION 1)     # this one not so much
+
+# this is the location of the amd64 toolchain targeting the Raspberry Pi
+SET(CMAKE_C_COMPILER $ENV{RPI_ROOT}/../bin/arm-linux-gnueabihf-gcc)
+
+# this is the file system root of the target
+SET(CMAKE_FIND_ROOT_PATH $ENV{RPI_ROOT})
+
+# search for programs in the build host directories
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+
+# for libraries and headers in the target directories
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+```
+
+最后就可以开始编译了，命令如下：
+> cd ~/Source/azure-iot-sdks/c/build_all/linux   
+> ./build.sh --toolchain-file toolchain-rpi.cmake -cl --sysroot=$RPI_ROOT
+
+在编译时，需要为编译脚本指定树莓派专有cmake 文件和编译时的根目录。
 
