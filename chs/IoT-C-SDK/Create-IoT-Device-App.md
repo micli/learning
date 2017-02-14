@@ -207,7 +207,7 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 > sudo add-apt-repository ppa:aziotsdklinux/ppa-azureiot   
 > sudo apt-get install -y azure-iot-sdk-c-dev
 
-2. 在操作系统任意位置创建一个文件夹，从GitHub 上下载IoT C SDK 的快速启动代码到这个文件夹：
+2. 在操作系统任意位置创建一个文件夹，从GitHub 上下载IoT C SDK 的[快速启动代码](https://github.com/micli/learning/tree/master/src/IoT-C-SDK)到这个文件夹：
 
 ![IoT快速开始代码文件夹](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/IoT-Quick-Start-Folder.png 'IoT快速开始代码文件夹')
 
@@ -237,11 +237,11 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 3. 目标操作系统的头文件和库文件同步到编译计算机上
 4. 从Github 上获取IoT C SDK
 
-在准备好以上步骤以后就可以开始交叉编译了。以树莓派使用的操作系统Raspbian(Debian的变种)为例，安装依赖库
+在准备好以上步骤以后就可以开始交叉编译了。以树莓派使用的操作系统Raspbian(Debian的变种)为例，需要在开发板操作系统上用下面命令安装依赖库
 
 > sudo apt-get install -y build-essential curl libcurl4-openssl-dev libssl-dev uuid-dev
 
-需要从Github上下载工具链：
+在编译计算机上，需要从Github上下载工具链：
 > cd ~  
 > mkdir RPiTools  
 > cd RPiTools  
@@ -253,14 +253,14 @@ Azure IoT Hub 收到的消息。iothub-explorer 工具需要Node.js的支持，�
 > cd ~/RPiTools/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf   
 > rsync -rl --safe-links pi@<树莓派设备名称或者IP地址>:/{lib,usr} .
 
-rsync 命令会递归地把开发板上的/lib 和/usr 的内容复制到编译计算机的树莓派编译器工具链目录下。 这个复制的过程会比较漫长，
+rsync 命令会递归地把开发板上的/lib 和/usr 的内容复制到编译计算机的树莓派工具链目录下。 由于内容过多，这个复制的过程会比较漫长，
 通常在网络较好的情况下也要持续40分钟以上。需要耐心等待。
 
 在以上动作完成之后，需要把Raspbian 工具链编译器所在文件夹路径设置到环境变量RPI_ROOT 中
 > cd ~/RPiTools/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf  
 > export RPI_ROOT=$(pwd)
 
-从Github上获取IoT C SDK 命令如下:
+在编译计算机上，从Github上获取IoT C SDK 命令如下:
 > git clone --recursive https://github.com/Azure/azure-iot-sdks.git
 
 并修改位于IoT C SDK 文件夹所在目录/c/build_all/linux 中创建一个名为toolchain-rpi.cmake 的文件，并加入下面的内容：
@@ -285,7 +285,9 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 ```
 
-最后就可以开始编译了，命令如下：
+这个cmake 文件指定了Raspbian 系统工具链中编译器所在的文件路径。以及编译时的“根目录”(RPI_ROOT)。
+
+最后终于可以开始编译了，命令如下：
 > cd ~/Source/azure-iot-sdks/c/build_all/linux   
 > ./build.sh --toolchain-file toolchain-rpi.cmake -cl --sysroot=$RPI_ROOT
 
