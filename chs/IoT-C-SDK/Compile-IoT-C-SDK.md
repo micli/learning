@@ -169,7 +169,16 @@ sudo apt-get update
 
 在运行程序之前，必须要对connectionString 进行有效地赋值。创建设备连接字符串的方法请参考下面一节内容。
 
-### 获取IoT Hub 设备联接串
+### 获取IoT Hub 设备连接串
+
+在正式向IoT Hub 注册服务之前，必须要先创建一个位于Azure 上的IoT Hub 服务资源。首先，需要用Azure账号登录portal.azure.cn。
+在门户网站上点击"+"号，选择物联网-> IoT Hub, 创建一个IoT Hub 服务。在测试阶段，可以在服务级别中选择免费，用于开发和测试。
+如下图所示：
+![创建IoTHub](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/IoTHub-Create.png '创建IoTHub')
+
+待创建完成后，在IoT Hub 服务中选择"共享访问策略"->"iothubowner"->"连接字符串 - 主密钥" 进行复制。如图所示：
+![复制连接字符串](https://github.com/micli/learning/blob/master/images/IoT-C-SDK/IoTHub-Copy-String.png '复制连接字符串')
+复制出来的内容就是IoT服务连接字符串，将会在下面的操作中用到。
 
 IoT SDK 内含一个用Node.js 开发的命令行工具来帮助开发人员在命令行下管理Azure IoT Hub 服务。
 这个命令行工具名为iothub-explorer，安装方法如下：
