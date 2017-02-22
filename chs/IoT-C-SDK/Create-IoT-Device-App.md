@@ -291,5 +291,9 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 > cd ~/Source/azure-iot-sdks/c/build_all/linux   
 > ./build.sh --toolchain-file toolchain-rpi.cmake -cl --sysroot=$RPI_ROOT
 
-在编译时，需要为编译脚本指定树莓派专有cmake 文件和编译时的根目录。
+在编译时，需要为编译脚本指定树莓派专有cmake 文件和编译时的根目录。对于一些版本比较低的ARM编译器，需要显式地指定使用C99规范编译源代码。
+并关闭"Warning treated as error" 开关。为ARM gcc 编译器指定编译参数需要使用-cl，如下：
+
+> cd ~/Source/azure-iot-sdks/c/build_all/linux   
+> ./build.sh --toolchain-file toolchain-rpi.cmake -cl --sysroot=$RPI_ROOT -cl -w -cl --std=c99
 
