@@ -37,11 +37,10 @@
 * IoT Python SDK **2017.06.06 或更新的版本**
  
 如果用户不确定他们是否使用了正确的IoT Client SDK版本, 那么如何验证呢？
-对于IoT Client C SDK, 请打开 <IoT C SDK root folder> / certs/certs.c 文件。
- 
-对于IoT Client Java SDK, 请打开 <IoT Java SDK root folder> / device/iot-device-client/src/main/java/com/microsoft/azure/sdk/iot/device/IotHubCertificateManager.java 文件。
- 
-对于 IoT Client Python SDK, 请打开 <IoT Python SDK root folder> / device/samples/iothub_client_cert.py 文件。
+* 对于IoT Client C SDK, 请打开 <IoT C SDK root folder> / certs/certs.c 文件。
+* 对于IoT Client Java SDK, 请打开 <IoT Java SDK root folder> / device/iot-device-client/src/main/java/com/microsoft/azure/sdk/iot/device/IotHubCertificateManager.java 文件。
+* 对于 IoT Client Python SDK, 请打开 <IoT Python SDK root folder> / device/samples/iothub_client_cert.py 文件。
+
 请查看文件的内容, 并检查其中是否有 DigiCert 证书的相关数据。类似下面的内容：
 ```/*DigiCert Global Root CA*/
 "-----BEGIN CERTIFICATE-----\r\n"
