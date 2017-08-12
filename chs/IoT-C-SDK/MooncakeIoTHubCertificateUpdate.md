@@ -9,7 +9,7 @@
 原因是Azure Mooncake现在使用的 TLS 证书是从 WoSign 签发的。不幸的是, WoSign 将被世界主流 IT 公司 (如 Mozilla、谷歌、苹果和微软) 抛弃。因为 WoSign 不珍惜自己的名誉, 做了一些蠢事。WoSign TLS 证书将不再能保护设备和物联网服务之间的数据安全。这是一个严重的安全问题, 并且已蔓延超过10月了。其实，不仅仅是IoT Hub 服务，Azure Mooncake 上的其它服务也都会全面禁用WoSign证书，有些服务早已更换完成了，比如SQL数据库PaaS服务。
  
 有关WoSign证书安全问题的详细信息, 请查看以下链接:
-* [microsoft dumps notorious chinese secure certificate vendor](http://www.zdnet.com/article/microsoft-dumps-notorious-chinese-secure-certificate-vendor/)
+* [Microsoft Dumps Notorious Chinese Secure Certificate Vendor](http://www.zdnet.com/article/microsoft-dumps-notorious-chinese-secure-certificate-vendor/)
 * [Mozilla: WoSign Issues](https://wiki.mozilla.org/CA:WoSign_Issues)
 * [知乎: 如何看待 Mozilla 决定停止信任沃通 (WoSign) 和 StartCom 颁发的证书？](https://www.zhihu.com/question/51042407)
 
