@@ -6,7 +6,7 @@
  
 # 为什么Azure Mooncake必须更改 TLS 证书？
  
-原因是Azure Mooncake现在使用的 TLS 证书是从 WoSign 签发的。不幸的是, WoSign 将被世界主流 IT 公司 (如 Mozilla、谷歌、苹果和微软) 抛弃。因为 WoSign 不珍惜自己的名誉, 做了一些蠢事。WoSign TLS 证书将不再能保护设备和物联网服务之间的数据安全。这是一个严重的安全问题, 并且已蔓延超过10月了。其实，不仅仅是IoT Hub 服务，Azure Mooncake 上的其它服务也都会全面禁用WoSign证书，有些服务早已更换完成了，比如SQL数据库PaaS服务。
+原因是Azure Mooncake现在使用的 TLS 证书是从 WoSign 签发的。不幸的是, WoSign 将被世界主流 IT 公司 (如 Mozilla、谷歌、苹果和微软) 抛弃。因为 WoSign 不珍惜自己的名誉, 做了一些蠢事。WoSign TLS 证书将不再能保护设备和物联网服务之间的数据安全。这是一个严重的安全问题, 并且已蔓延超过10月了。其实，不仅仅是IoT Hub 服务，Azure Mooncake 上的其它服务也都会全面禁用WoSign证书，有些服务早已更换完成了，比如SQL数据库PaaS服务。
  
 有关WoSign证书安全问题的详细信息, 请查看以下链接:
 * [microsoft dumps notorious chinese secure certificate vendor](http://www.zdnet.com/article/microsoft-dumps-notorious-chinese-secure-certificate-vendor/)
@@ -67,7 +67,7 @@
 如果您的设备应用已满足上述标准, 您不需要做任何事情来应对本次更新。
  
 ### 对于第二种情况:
-这意味着您的IoT设备没有真正地部署到生产环境中, 但是使用了版本较老的IoT Client SDK。您需要从 Github 获得最新的IoT Client SDK 源代码, 并与您编写的设备应用程序代码一起重新编译，以便确保DigiCert证书已经包含在您的设备应用程序中。然后您需要对您用于测试的设备重新部署刚刚编译好的设备应用程序。以下是IoT Client SDK 的Github 代码仓库地址:
+这意味着您的IoT设备没有真正地部署到生产环境中, 但是使用了版本较老的IoT Client SDK。您需要从 Github 获得最新的IoT Client SDK 源代码, 并与您编写的设备应用程序代码一起重新编译，以便确保DigiCert证书已经包含在您的设备应用程序中。然后您需要对您用于测试的设备重新部署刚刚编译好的设备应用程序。以下是IoT Client SDK 的Github 代码仓库地址:
 * [IoT Client C SDK 项目Github 仓库](https://github.com/Azure/azure-iot-sdk-c)
 * [IoT Client Java SDK 项目Github 仓库](https://github.com/Azure/azure-iot-sdk-java)
 * [IoT Client Python SDK 项目Github 仓库](https://github.com/Azure/azure-iot-sdk-python)
@@ -80,7 +80,7 @@
  
 **请Azure Mooncake IoT Hub服务的用户及时采取行动,以便确保本次证书更新不会影响到未来您IoT 设备与IoT Hub 服务的通信。**
 
-Azure Mooncake 运维团队会在以下时间持续地提醒IoT Hub 服务用户：
+Azure Mooncake 运维团队会在以下时间持续地提醒IoT Hub 服务用户：
 * 更新之前的45天(已经邮件提醒)
 * 更新之前的30天
 * 更新之前的14天
