@@ -1,4 +1,5 @@
 最近, Azure Mooncake 用户都收到了下面的消息, 通知Mooncake 用户IoT Hub TLS 证书将在 9月25日进行更改：
+
 [中国区Azure IoT 中心服务的根证书变更通知](https://www.azure.cn/blog/2017/07/21/RootCertificateChangeNoticeforAzureIoTHubServiceinAzureinChina)
  
 请不要忽略此通知, 因为此更改将影响到您的物联网设备连接到 IoT Hub服务。
