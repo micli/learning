@@ -14,8 +14,8 @@
 * [知乎: 如何看待 Mozilla 决定停止信任沃通 (WoSign) 和 StartCom 颁发的证书？](https://www.zhihu.com/question/51042407)
 
 微软本次使用DigiCert 替换掉WoSign 证书也是本着对用户数据传输安全负责的态度，及时消除安全隐患而进行的。
- 
-# 作为Mooncake IOT Hub 用户，需要做什么？
+
+# 作为Mooncake IoT Hub 用户，需要做什么？
  
 首先, 我们必须对本次TLS 证书的变更引起足够的重视，因为TLS 证书一旦失效，会影响到所有通过安全套接字层连接IoT Hub 服务的全部设备。这将导致仍在使用WoSign 证书的设备无法连接到IoT Hub 服务。其次, 作为Mooncake IoT Hub 的用户需要进行相应的更新操作来应对本次的更新。
  
@@ -37,9 +37,9 @@
 * IoT Python SDK **2017.06.06 或更新的版本**
  
 如果用户不确定他们是否使用了正确的IoT Client SDK版本, 那么如何验证呢？
-* 对于IoT Client C SDK, 请打开 <IoT C SDK root folder> / certs/certs.c 文件。
-* 对于IoT Client Java SDK, 请打开 <IoT Java SDK root folder> / device/iot-device-client/src/main/java/com/microsoft/azure/sdk/iot/device/IotHubCertificateManager.java 文件。
-* 对于 IoT Client Python SDK, 请打开 <IoT Python SDK root folder> / device/samples/iothub_client_cert.py 文件。
+* 对于IoT Client C SDK, 请打开 {IoT C SDK root folder}/certs/certs.c 文件。
+* 对于IoT Client Java SDK, 请打开 {IoT Java SDK root folder}/device/iot-device-client/src/main/java/com/microsoft/azure/sdk/iot/device/IotHubCertificateManager.java 文件。
+* 对于 IoT Client Python SDK, 请打开 {IoT Python SDK root folder}/device/samples/iothub_client_cert.py 文件。
 
 请查看文件的内容, 并检查其中是否有 DigiCert 证书的相关数据。类似下面的内容：
 ```/*DigiCert Global Root CA*/
