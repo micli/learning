@@ -42,7 +42,8 @@
 * 对于 IoT Client Python SDK, 请打开 {IoT Python SDK root folder}/device/samples/iothub_client_cert.py 文件。
 
 请查看文件的内容, 并检查其中是否有 DigiCert 证书的相关数据。类似下面的内容：
-```/*DigiCert Global Root CA*/
+```c
+/*DigiCert Global Root CA*/
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
 "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
