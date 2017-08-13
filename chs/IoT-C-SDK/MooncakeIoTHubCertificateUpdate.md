@@ -91,3 +91,5 @@ Azure Mooncake 运维团队会在以下时间持续地提醒IoT Hub 服务用户
 * 更新之前的30天
 * 更新之前的14天
 * 更新之前的7天，每日提醒
+
+OTA(Over The Air update) 是指通过无线网络在线分发、升级软件的方式。通过这种方式，IoT 设备可以自动地从服务器上下载最新的软件并完成对自身的更新和自引导。OTA 的详情请参考[**这里**](https://en.wikipedia.org/wiki/Over-the-air_programming)
