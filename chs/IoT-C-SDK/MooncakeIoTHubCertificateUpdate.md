@@ -31,7 +31,7 @@
 
  
 ### 对于第一种情况:
-已包含新的 TLS 证书的很多 SDK 意味着IoT Hub 正在使用的是以下IoT Client SDK 版本:
+已包含新的 TLS 证书的很多 SDK 意味着连接IoT Hub 服务，正在使用的是以下IoT Client SDK 版本:
 * IoT C SDK **2017.3.10 或更新的版本**
 * IoT Java SDK **2017.4.21 或更新的版本**
 * IoT Python SDK **2017.06.06 或更新的版本**
@@ -79,7 +79,7 @@
 * [IoT Client Python SDK 项目Github 仓库](https://github.com/Azure/azure-iot-sdk-python)
  
 ### 对于第三种情况:
-在这种情况下, 您必须从 Github 网站下载最新的IoT Client SDK 源代码。然后您必须用最新的IoT Client SDK与您的设备应用程序代码一起重新编译。最后, 您必须在**2017年9月25日之前**通过设备的自我更新功能(OTA)，升级IoT设备应用程序。如果您的IoT设备中的应用程序在9月25日还没有更新, 您的物联网设备将从2017年9月25日起失去与Mooncake IoT Hub服务的连接。
+在这种情况下, 您必须从 Github 网站下载最新的IoT Client SDK 源代码。然后您必须用最新的IoT Client SDK与您的设备应用程序代码一起重新编译。最后, 您必须在**2017年9月25日之前**通过设备的自我更新功能(OTA)，升级IoT设备应用程序。如果您的IoT设备中的应用程序在9月25日还没有更新, 您的物联网设备将从2017年9月25日起失去与Mooncake IoT Hub服务的连接。这意味着您可能永久丧失了通过OTA 更新IoT 设备的机会。
  
 ### 对于第四种情况:
 这是最糟糕的一种情况。因为您的IoT 设备没有自动更新能力，应对本次TLS 证书更新会导致极大的工作量。与情况三类似, 您必须从 Github 下载最新的IoT Client SDK源代码, 然后使用最新的IoT Client SDK来编译应用程序。最后, 您必须在**2017年9月25日之前**逐个手动升级IoT设备。
